@@ -147,7 +147,7 @@ leafletMap <- function(
       )
     ),
     tags$div(
-      id = outputId, class = "leaflet-map-output sidebar-map",
+      id = outputId, class = "sidebar-map leaflet-map-output",
       style = sprintf("width: %s; height: %s", width, height),
 
       tags$script(

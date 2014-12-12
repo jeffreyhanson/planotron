@@ -7,8 +7,8 @@ L.Control.Sidebar = L.Control.extend({
         L.setOptions(this, options);
 
         // Find sidebar HTMLElement
-        // this._sidebar = L.DomUtil.get(id);
-        this._sidebar = id;		
+        this._sidebar = L.DomUtil.get(id);
+        // this._sidebar = id;		
 
         // Attach touch styling if necessary
         if (L.Browser.touch)
