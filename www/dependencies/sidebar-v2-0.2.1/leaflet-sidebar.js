@@ -8,7 +8,6 @@ L.Control.Sidebar = L.Control.extend({
 
         // Find sidebar HTMLElement
         this._sidebar = L.DomUtil.get(id);
-        // this._sidebar = id;		
 
         // Attach touch styling if necessary
         if (L.Browser.touch)
@@ -17,16 +16,14 @@ L.Control.Sidebar = L.Control.extend({
         // Find sidebar > ul.sidebar-tabs and sidebar > div.sidebar-content
         for (i = this._sidebar.children.length - 1; i >= 0; i--) {
             child = this._sidebar.children[i];
-            if (child.tagName == 'UL' &&
-                    L.DomUtil.hasClass(child, 'sidebar-tabs'))
+            if (child.tagName == 'UL' && L.DomUtil.hasClass(child, 'sidebar-tabs'))
                 this._tabs = child;
-
-            else if (child.tagName == 'DIV' &&
-                    L.DomUtil.hasClass(child, 'sidebar-content'))
+            else if (child.tagName == 'DIV' && L.DomUtil.hasClass(child, 'sidebar-content'))
                 this._container = child;
         }
 
         // Find sidebar > ul.sidebar-tabs > li
+		console.log("tab items");
         this._tabitems = [];
         for (i = this._tabs.children.length - 1; i >= 0; i--) {
             child = this._tabs.children[i];
@@ -37,12 +34,12 @@ L.Control.Sidebar = L.Control.extend({
         }
 
         // Find sidebar > div.sidebar-content > div.sidebar-pane
+		console.log("pane items");
         this._panes = [];
         for (i = this._container.children.length - 1; i >= 0; i--) {
             child = this._container.children[i];
-            if (child.tagName == 'DIV' &&
-                L.DomUtil.hasClass(child, 'sidebar-pane'))
-                this._panes.push(child);
+            if (child.tagName == 'DIV' && L.DomUtil.hasClass(child, 'sidebar-pane'))
+			this._panes.push(child);
         }
 
         this._hasTouchStart = L.Browser.touch &&

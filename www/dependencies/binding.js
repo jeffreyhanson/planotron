@@ -273,37 +273,11 @@ var dataframe = (function() {
 		map.addLayer(esri_hybrid);			
 		
 		// add sidebar to map
-		// var sidebar=L.DomUtil.create("div", "sidebar collapse");
-		// var tabs=L.DomUtil.create("ul", "sidebar-tabs",sidebar);		
-		// var panes=L.DomUtil.create("div", "sidebar-content active",sidebar);
-		
-		// var feature_toc_li=L.DomUtil.create("li", "sidebar collapse", tabs);
-		// feature_toc_li.innerHTML="<a href=\"#feature_toc\" role=\"tab\"><i class=\"fa fa-bars\"></i></a>";
-		// var marxan_controls_li=L.DomUtil.create("li", "sidebar collapse", tabs);
-		// marxan_controls_li.innerHTML="<a href=\"#marxan_controls\" role=\"tab\"><i class=\"fa fa-gear\"></i></a>";
-		// var help_li=L.DomUtil.create("li", "sidebar collapse", tabs);
-		// help_li.innerHTML="<a href=\"#help\" role=\"tab\"><i class=\"fa fa-question\"></i></a>";
-		// var about_li = L.DomUtil.create("li","sidebar collapse", tabs);
-		// about_li.innerHTML="<a href=\"#about\" role=\"tab\"><i class=\"fa fa-info\"></i></a>";
-	
-		// map.feature_toc_pane=L.DomUtil.create("div", "sidebar-pane", panes);
-		// map.feature_toc_pane.innerHTML="<div><h1>feature_toc</h1><p>Feature table of contents</p></div>";
-		// map.feature_toc_pane.id="feature_toc";
-		// var marxan_controls_pane=L.DomUtil.create("div", "sidebar-pane", panes);
-		// marxan_controls_pane.innerHTML="<div><h1>marxan_controls</h1><p>Marxan controls</p></div>";
-		// marxan_controls_pane.id="marxan_controls";
-		// var help_pane=L.DomUtil.create("div", "sidebar-pane", panes);
-		// help_pane.innerHTML="<div><h1>help</h1><p>help</p></div>";
-		// help_pane.id="help";
-		// var about_pane=L.DomUtil.create("div", "sidebar-pane", panes);
-		// about_pane.innerHTML="<div><h1>about</h1><p>about</p></div>";
-		// about_pane.id="id";
-
-		console.log('1');
-		// console.log(sidebar.children);
-		// console.log(sidebar.children.length);
+		document.getElementById("feature_toc").innerHTML="<h1>feature_toc</h1><p>Feature table of contents</p>";
+		document.getElementById("marxan_controls").innerHTML="<h1>marxan_controls</h1><p>Marxan controls</p>";
+		document.getElementById("help").innerHTML="<h1>help</h1><p>help</p>";
+		document.getElementById("about").innerHTML="<h1>about</h1><p>about</p>";		
 		var sidebar = L.control.sidebar("sidebar").addTo(map);
-		console.log('2');
 				
 		// tell shiny to starting loading map data now that the GUI components have been generated
 		Shiny.onInputChange(id + '_load_data', {
