@@ -23,7 +23,6 @@ L.Control.Sidebar = L.Control.extend({
         }
 
         // Find sidebar > ul.sidebar-tabs > li
-		console.log("tab items");
         this._tabitems = [];
         for (i = this._tabs.children.length - 1; i >= 0; i--) {
             child = this._tabs.children[i];
@@ -34,7 +33,6 @@ L.Control.Sidebar = L.Control.extend({
         }
 
         // Find sidebar > div.sidebar-content > div.sidebar-pane
-		console.log("pane items");
         this._panes = [];
         for (i = this._container.children.length - 1; i >= 0; i--) {
             child = this._container.children[i];

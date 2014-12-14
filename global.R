@@ -18,8 +18,16 @@ source("leaflet.R")
 
 ### define global variables
 # load data and set program vars
-program_version="0.0.1"
-load("data/baselayers.RDATA")
+program_version="0.0.0"
+load("data/data.RDATA")
+
+# server settings
+emailDF=try(read.table("private/mandrill_emailaccount.csv", sep=",", header=TRUE, as.is=TRUE))
+shinyurl="https://paleo13.shinyapps.io/mapotron/"
+emailWhiteList=read.table("private/emailwhitelist.csv", sep=",", header=TRUE, as.is=TRUE)[,1,drop=TRUE]
+emailBlockList=read.table("private/emailblocklist.csv", sep=",", header=TRUE, as.is=TRUE)[,1,drop=TRUE]
+fileExpiry=7
+
 
 # colors
 rwPals=c("Set1", "Dark2", "Accent")

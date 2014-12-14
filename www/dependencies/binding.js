@@ -219,7 +219,6 @@ var dataframe = (function() {
         map.on('click', function(e) {
 			// reset style
 			deactivate(id);
-		  
 			// send data to shiny
 			Shiny.onInputChange(id + '_click', {
 				lat: e.latlng.lat,
@@ -273,11 +272,17 @@ var dataframe = (function() {
 		map.addLayer(esri_hybrid);			
 		
 		// add sidebar to map
-		document.getElementById("feature_toc").innerHTML="<h1>feature_toc</h1><p>Feature table of contents</p>";
-		document.getElementById("marxan_controls").innerHTML="<h1>marxan_controls</h1><p>Marxan controls</p>";
-		document.getElementById("help").innerHTML="<h1>help</h1><p>help</p>";
-		document.getElementById("about").innerHTML="<h1>about</h1><p>about</p>";		
 		var sidebar = L.control.sidebar("sidebar").addTo(map);
+		var toc_el=document.getElementById("toc");
+		var TOC=Sortable.create(toc_el, {
+			onUpdate: function(event) {
+				var array=this.toArray();
+				var n=array.length+10
+				for (i = 0; i < array.length; i++) {
+					maps[id].getPane(array[i]+"_pane").style="z-index: "+(n-i);
+				}
+			}
+		});
 				
 		// tell shiny to starting loading map data now that the GUI components have been generated
 		Shiny.onInputChange(id + '_load_data', {
@@ -368,12 +373,17 @@ var dataframe = (function() {
     ]);
   };
   
-  
+ 
   // feature methods
   methods.addFeature = function(layerId, data, mode, name) {
 		if (typeof(data) === "string") {
 		  data = JSON.parse(data);
 		}
+		var mapId=this.id;
+		var pane = this.createPane(layerId+"_pane");
+		var canvas = L.canvas();
+		canvas.options.pane=layerId+"_pane";
+		
 		var i=0;
 		var gjlayer = L.geoJson(data, {
 			style: function(feature) {
@@ -393,33 +403,56 @@ var dataframe = (function() {
 			},
 			onEachFeature: function(feature,layer) {
 				// set mouse handlers
-				layer.on('click', mouseHandler(this.id, layerId+'_'+(i+1), 'feature_click'), this);
+				layer.on('click', mouseHandler(mapId, layerId+'_'+(i+1), 'feature_click'), maps[mapId]);
 				if (mode=='rw') {
-					layer.on('contextmenu', textPopup(this.id, layerId+'_'+(i+1), 'note'), this);
+					layer.on('contextmenu', textPopup(mapId, layerId+'_'+(i+1), 'note'), maps[mapId]);
 				}
-				layer.on('mouseover', mouseHandler(this.id, layerId+'_'+(i+1), 'feature_mouseover'), this);
-				layer.on('mouseout', mouseHandler(this.id, layerId+'_'+(i+1), 'feature_mouseout'), this);
+				layer.on('mouseover', mouseHandler(mapId, layerId+'_'+(i+1), 'feature_mouseover'), maps[mapId]);
+				layer.on('mouseout', mouseHandler(mapId, layerId+'_'+(i+1), 'feature_mouseout'), maps[mapId]);
 				// set note
-				layer.bindLabel(feature.properties.note, {direction: "left"});
+				// layer.bindLabel(feature.properties.note, {direction: "left"});
 				// post
 				++i;
-			}
+			},
+			renderer: canvas
 		});
 		
 		// set fields
 		gjlayer.id=layerId;
-		gjlayer.type="geojson";		
-				
+		gjlayer.type="geojson";
+		
 		// add layer
 		if (mode=='r') {
 			this.rfeatures.add(gjlayer, layerId);
 		} else {
 			this.rwfeatures.add(gjlayer, layerId);
 		}
+		
 		// add to control
-		this.base_toc.addOverlay(gjlayer, name);  
-  }
-
+		var toc = document.getElementById("toc");
+		var toc_element = document.createElement("div");
+		toc_element.setAttribute("class", "list-group-item");
+		toc_element.setAttribute("data-id", layerId);
+		toc_element.innerHTML=''+
+			'<div class="toc-element-'+mode+'feature well">'+
+				'<div class="toc-element-label">' +
+					'<h5>'+name+'</h5>'+
+				'</div>'+
+				'<div class="toc-element-checkbox">'+
+					'<input name="'+layerId+'" type="checkbox" checked="checked" onchange="viewFeature(this.name, this.checked)">'+
+				'</div>'+
+			'</div>'
+		// toc.appendChild(toc_element);
+		toc.insertBefore(toc_element, toc.firstChild);
+  };
+  
+  methods.viewFeature = function(layerId, status) {
+	if (status) {
+		this.getPane(layerId+"_pane").style.display="";
+	} else {
+		this.getPane(layerId+"_pane").style.display="none";
+	}
+  };
 
   methods.clearFeatures = function(mode) {
 	if (mode=='r' ||  mode=='all')
@@ -455,9 +488,9 @@ var dataframe = (function() {
 			this.rwfeatures.get(layerId).bindLabel(text, {direction: "left"});
 		}
 	if (mode=="r")
-		this.rwfeatures.get(layerId).note=text;
+		this.rfeatures.get(layerId).note=text;
 		this.rfeatures.get(layerId).bindLabel(text, {direction: "left"});
-  }
+  };
   
   function setLabel(mapId, layerId, label) {
 		// add label to object
@@ -508,9 +541,9 @@ var dataframe = (function() {
 		.setContent(domelem);
 		// store popup
 		this.popups.add(popup, "map_add_note");
-	};
+	};		
   }
-  
+
   // layer store class declaration
   function LayerStore(map) {
     this._layers = {};

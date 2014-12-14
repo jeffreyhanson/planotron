@@ -23,6 +23,13 @@ TOC = setRefClass("TOC",
 			email<<-list()
 			args<<-list()
 		},
+		newPuFeature=function(id, data, mode, ...) {
+			if (inherits(data, "SpatialPolygons")) {
+				features[[as.character(id)]]<<-POLYGON$new(id, data, mode, ...)
+			} else {
+				stop("Planning unit data must be SpatialPolygons or Polygon data.")
+			}
+		},
 		newFeature=function(id, data, mode, ...) {
 			if (inherits(data, "SpatialPoints")) {
 				features[[as.character(id)]]<<-POINT$new(id, data, mode, ...)
@@ -180,6 +187,10 @@ parseFortune(fortune())
 )
 
 # feature class
+PUFEATURE=setRefClass("PUFEATURE",
+	fields=list(.id="character", .mode="character", .name="character", .notes="character", .cols="character", .marxan_results="data.frame"),
+)
+
 FEATURE=setRefClass("FEATURE",
 	fields=list(.id="character", .mode="character", .name="character", .notes="character", .cols="character"),
 )
@@ -324,4 +335,6 @@ POLYGON=setRefClass("POLYGON",
 		}
 	)
 )
+
+
 

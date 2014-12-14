@@ -66,7 +66,9 @@ createLeafletMap <- function(session, outputId) {
     stub(setView(lat, lng, zoom, forceReset = FALSE)),
     stub(fitBounds(lat1, lng1, lat2, lng2)),
     
+    stub(viewFeature(layerId, status)),
 	stub(addFeature(layerId, data, mode, name, note, style)),
+	stub(addPuFeature(layerId, data, mode, name, note, style)),
     stub(removeFeatures(layerId)),
     stub(clearFeatures(mode)),
 
@@ -89,14 +91,14 @@ leafletMap <- function(
   tagList(
     singleton(
       tags$head(
-        tags$link(rel="stylesheet", type="text/css", href="dependencies/leaflet.css"),
+        tags$link(rel="stylesheet", type="text/css", href="dependencies/leaflet-dev/leaflet.css"),
 		tags$link(rel="stylesheet", type="text/css", href="dependencies/Leaflet.draw-0.2.3/dist/leaflet.draw.css"),
 		tags$link(rel="stylesheet", type="text/css", href="dependencies/leaflet-control-geocoder/Control.Geocoder.css"),
 		tags$link(rel="stylesheet", type="text/css", href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css"),
 		tags$link(rel="stylesheet", type="text/css", href="dependencies/Leaflet.label/dist/leaflet.label.css"),
 		tags$link(rel="stylesheet", type="text/css", href="dependencies/sidebar-v2-0.2.1/leaflet-sidebar.min.css"),
 
-        tags$script(src="dependencies/leaflet.js"),
+        tags$script(src="dependencies/leaflet-dev/leaflet.js"),
 		
 		tags$script(src="https://maps.google.com/maps/api/js?v=3&sensor=false"),		
         tags$script(src="dependencies/Leaflet.draw-0.2.3/src/Leaflet.draw.js"),
@@ -143,6 +145,9 @@ leafletMap <- function(
 		tags$script(src="dependencies/sidebar-v2-0.2.1/jquery-sidebar.js"),
 		tags$script(src="dependencies/sidebar-v2-0.2.1/leaflet-sidebar.js"),
 
+		tags$script(src="http://rubaxa.github.io/Sortable/Sortable.js"),
+		
+		
 		tags$script(src="dependencies/binding.js")
       )
     ),
