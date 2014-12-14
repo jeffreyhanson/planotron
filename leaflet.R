@@ -145,7 +145,7 @@ leafletMap <- function(
 		tags$script(src="dependencies/sidebar-v2-0.2.1/jquery-sidebar.js"),
 		tags$script(src="dependencies/sidebar-v2-0.2.1/leaflet-sidebar.js"),
 
-		tags$script(src="http://rubaxa.github.io/Sortable/Sortable.js"),
+		tags$script(src="https://rubaxa.github.io/Sortable/Sortable.js"),
 		
 		
 		tags$script(src="dependencies/binding.js")
