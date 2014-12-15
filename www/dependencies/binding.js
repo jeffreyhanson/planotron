@@ -367,12 +367,21 @@ var dataframe = (function() {
     this.setView([lat, lng], zoom, forceReset);
   };
 
-  methods.fitBounds = function(lat1, lng1, lat2, lng2) {
-    this.fitBounds([
-      [lat1, lng1], [lat2, lng2]
-    ]);
+  methods.fitBounds = function(coords, padding) {
+    this.fitBounds(
+		[
+			[coords[0], coords[1]],
+			[coords[2], coords[3]]
+		],
+		{
+			paddingTopLeft: [400,0]
+		}
+    );
   };
   
+  methods.fitWorld=function() {
+	this.fitWorld();
+  }
  
   // feature methods
   methods.addFeature = function(layerId, data, mode, name) {
@@ -438,10 +447,16 @@ var dataframe = (function() {
 				'<div class="toc-element-label">' +
 					'<h5>'+name+'</h5>'+
 				'</div>'+
+				'<div class="toc-element-zoom">'+
+					'<button name="'+layerId+'" type="button" class="btn sbs-action-button" onclick="zoomFeature(this.name)">'+
+						'<i class="fa fa-search-plus"></i>'+
+					'</button>'+
+				'</div>'+
 				'<div class="toc-element-checkbox">'+
 					'<input name="'+layerId+'" type="checkbox" checked="checked" onchange="viewFeature(this.name, this.checked)">'+
 				'</div>'+
 			'</div>'
+			
 		// toc.appendChild(toc_element);
 		toc.insertBefore(toc_element, toc.firstChild);
   };
@@ -453,7 +468,7 @@ var dataframe = (function() {
 		this.getPane(layerId+"_pane").style.display="none";
 	}
   };
-
+  
   methods.clearFeatures = function(mode) {
 	if (mode=='r' ||  mode=='all')
 		this.rfeatures.clear();
@@ -484,12 +499,12 @@ var dataframe = (function() {
   
   methods.addLabel = function(layerId, text, mode) {	
 	if (mode=="rw") {
-			this.rwfeatures.get(layerId).note=text;
-			this.rwfeatures.get(layerId).bindLabel(text, {direction: "left"});
-		}
-	if (mode=="r")
+		this.rwfeatures.get(layerId).note=text;
+		this.rwfeatures.get(layerId).bindLabel(text, {direction: "left"});
+	} else if (mode=="r") {
 		this.rfeatures.get(layerId).note=text;
 		this.rfeatures.get(layerId).bindLabel(text, {direction: "left"});
+	}
   };
   
   function setLabel(mapId, layerId, label) {

@@ -64,7 +64,8 @@ createLeafletMap <- function(session, outputId) {
   
   structure(c(
     stub(setView(lat, lng, zoom, forceReset = FALSE)),
-    stub(fitBounds(lat1, lng1, lat2, lng2)),
+    stub(fitBounds(coords)),
+    stub(fitWorld()),
     
     stub(viewFeature(layerId, status)),
 	stub(addFeature(layerId, data, mode, name, note, style)),

@@ -24,7 +24,14 @@ shinyUI(basicPage(
         <!-- Tab panes -->
         <div class="sidebar-content active">
             <div class="sidebar-pane" id="feature_toc">
-				<h2>Table of contents</h2>
+				<div class="toc-header-label">
+					<h2>Table of contents</h2>
+				</div>
+				<div class="toc-header-zoom">
+					<button id="zoom_active_features" type="button" class="btn sbs-action-button" onclick="zoomActiveFeatures()">
+						<i class="fa fa-globe"></i>
+					</button>					
+				</div>
 				<div id="toc" class="list-group"></div>
 			</div>
             <div class="sidebar-pane" id="marxan_controls">
@@ -160,7 +167,20 @@ shinyUI(basicPage(
 					".nonce":Math.random()
 				})
 			}
-					
+
+			function zoomFeature(id) {
+				Shiny.onInputChange("zoom_feature", {
+					"id":id,
+					".nonce":Math.random()
+				})
+			}
+
+			function zoomActiveFeatures() {
+				Shiny.onInputChange("zoom_active_features", {
+					".nonce":Math.random()
+				})
+			}
+			
 			Shiny.addCustomMessageHandler("jsCode",
 				function(message) {
 				  console.log(message)

@@ -35,10 +35,30 @@ shinyServer(function(input, output, session) {
 		if (is.null(input$view_feature))
 			return()
 		isolate({
+			cat(input$view_feature$id, " = ", input$view_feature$status, "\n")
+			toc$features[[input$view_feature$id]]$.status=input$view_feature$status
 			map$viewFeature(input$view_feature$id, input$view_feature$status)
 		})
 	})
-		
+	
+	# zoom to feature
+	observe({
+		if (is.null(input$zoom_feature))
+			return()
+		isolate({
+			map$fitBounds(toc$features[[input$zoom_feature$id]]$bbox())
+		})
+	})
+
+	# zoom to active features
+	observe({
+		if (is.null(input$zoom_active_features))
+			return()
+		isolate({
+			map$fitBounds(toc$bbox())
+		})
+	})
+	
 	# render data
 	observe({
 		if (is.null(input$map_load_data))

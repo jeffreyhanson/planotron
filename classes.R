@@ -23,6 +23,15 @@ TOC = setRefClass("TOC",
 			email<<-list()
 			args<<-list()
 		},
+		bbox=function() {
+			statuses=sapply(features, function(x){return(x$.status)})
+			bboxes=sapply(features[which(statuses)], function(x){return(x$bbox())})
+			if (inherits(bboxes, "matrix")) {
+				return(c(max(bboxes[1,]), max(bboxes[2,]), min(bboxes[3,]), min(bboxes[4,])))
+			} else {
+				return(bboxes)
+			}
+		},
 		newPuFeature=function(id, data, mode, ...) {
 			if (inherits(data, "SpatialPolygons")) {
 				features[[as.character(id)]]<<-POLYGON$new(id, data, mode, ...)
@@ -188,11 +197,21 @@ parseFortune(fortune())
 
 # feature class
 PUFEATURE=setRefClass("PUFEATURE",
-	fields=list(.id="character", .mode="character", .name="character", .notes="character", .cols="character", .marxan_results="data.frame"),
+	fields=list(.id="character", .mode="character", .status="logical", .name="character", .notes="character", .cols="character", .marxan_results="data.frame"),
+	methods=list(
+		bbox=function() {
+			return(round(.data@bbox[4:1],5))
+		}
+	)
 )
 
 FEATURE=setRefClass("FEATURE",
-	fields=list(.id="character", .mode="character", .name="character", .notes="character", .cols="character"),
+	fields=list(.id="character", .mode="character", .status="logical", .name="character", .notes="character", .cols="character"),
+	methods=list(
+		bbox=function() {
+			return(round(.data@bbox[4:1],5))
+		}
+	)	
 )
 
 POINT=setRefClass("POINT",
@@ -203,6 +222,7 @@ POINT=setRefClass("POINT",
 			.id<<-as.character(id)
 			.mode<<-mode
 			.name<<-name
+			.status<<-TRUE
 			if (inherits(data, "SpatialPoints")) {
 				update.sp(data)
 			} else {
@@ -247,6 +267,7 @@ LINESTRING=setRefClass("LINESTRING",
 			.id<<-as.character(id)
 			.mode<<-mode
 			.name<<-name
+			.status<<-TRUE
 			if (inherits(data, "SpatialLines")) {
 				update.sp(data)
 			} else {
@@ -300,6 +321,7 @@ POLYGON=setRefClass("POLYGON",
 			.id<<-as.character(id)
 			.mode<<-mode
 			.name<<-name
+			.status<<-TRUE
 			if (inherits(data, "SpatialPolygons")) {
 				update.sp(data)
 			} else {
